@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # ============================================================
+  # PostgreSQL Database
+  # ============================================================
+  db:
+    image: postgres:15-alpine
+    container_name: velozity_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-velozity}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-velozity_dev_pw}
+      POSTGRES_DB: ${POSTGRES_DB:-velozity_projecthub}
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-velozity} -d ${POSTGRES_DB:-velozity_projecthub}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - velozity_network
+
+  # ============================================================
+  # pgAdmin (optional, for development database management)
+  # ============================================================
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: velozity_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@velozity.dev}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-pgadmin_dev_pw}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - '5050:80'
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - velozity_network
+    profiles:
+      - tools
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  velozity_network:
+    driver: bridge

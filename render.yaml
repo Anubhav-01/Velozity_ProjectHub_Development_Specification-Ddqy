@@ -1,0 +1,41 @@
+services:
+  # ── Backend Node.js / Express / Socket.io Service ───────────
+  - type: web
+    name: velozity-projecthub-api
+    env: node
+    plan: starter
+    rootDir: server
+    buildCommand: npm install && npx prisma generate --schema=../prisma/schema.prisma && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: velozity-postgres
+          property: connectionString
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: ACCESS_TOKEN_EXPIRES_IN
+        value: 15m
+      - key: REFRESH_TOKEN_EXPIRES_IN
+        value: 7d
+      - key: CLIENT_URL
+        value: https://velozity-projecthub.vercel.app
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAME_SITE
+        value: "none"
+
+  # ── PostgreSQL Database ─────────────────────────────────────
+  - type: postgres
+    name: velozity-postgres
+    plan: free
+    ipAllowList: [] # Allow all internal connections
+    databaseName: velozity_projecthub
+    user: velozity

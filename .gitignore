@@ -1,0 +1,69 @@
+# ============================================================
+# Velozity ProjectHub — .gitignore
+# ============================================================
+
+# ── Environment ──────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+.env.production
+
+# ── Node.js ──────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── Build Outputs ─────────────────────────────────────────────
+dist/
+build/
+*.tsbuildinfo
+
+# ── Prisma ───────────────────────────────────────────────────
+# Keep migrations, ignore generated client
+# (client is generated from schema, not stored)
+
+# ── Logs ─────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── OS Files ─────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ── IDE / Editor ─────────────────────────────────────────────
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ── Testing ──────────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ── Vite / Frontend ──────────────────────────────────────────
+client/dist/
+client/.vite/
+
+# ── TypeScript ───────────────────────────────────────────────
+server/dist/
+
+# ── Docker ───────────────────────────────────────────────────
+.docker/
+
+# ── Misc ─────────────────────────────────────────────────────
+*.tgz
+.cache/
+tmp/
+temp/
+
+# ── Old backend/frontend (replaced by server/ and client/) ───
+backend/
+frontend/
